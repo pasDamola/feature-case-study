@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Admin Page</title>
+    <style>
+      .clear-button {
+        background-color: rgb(200, 0, 0);
+        color: white;
+        border: none;
+        height: 36px;
+        width: 125px;
+        border-radius: 2px;
+        cursor: pointer;
+        transition: opacity 0.15s;
+      }
+
+      .clear-button:hover {
+        opacity: 0.8;
+      }
+
+      .success-message {
+        color: green;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Admin Page</h1>
+    {{ if .successMessage }}
+    <div class="success-message">{{ .successMessage }}</div>
+    {{ else }}
+    <form action="/products/clear" method="post">
+      <button class="clear-button">CLEAR CACHE</button>
+    </form>
+    {{ end }}
+  </body>
+</html>
