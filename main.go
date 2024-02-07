@@ -37,9 +37,14 @@ func NewProductHandler(c *gin.Context) {
    c.JSON(http.StatusOK, product)
 }
 
+func ListProductsHandler(c *gin.Context) {
+	c.JSON(http.StatusOK, products)
+}
+
 
 func main() {
  router := gin.Default()
  router.POST("/products", NewProductHandler)
+ router.GET("/products", ListProductsHandler)
  router.Run(":9003")
 }
