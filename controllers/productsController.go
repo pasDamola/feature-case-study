@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -46,12 +48,33 @@ func SearchProductsHandler(c *gin.Context) {
 	var products []models.CatalogProduct
 	initializers.DB.Find(&products)
 
-	tag := c.Query("online_date")
+	online_date := c.Query("online_date")
+
+	// Check if data exists in Redis cache
+    cachedData, err := initializers.RedisClient.Get(c, fmt.Sprintf("product-%s", online_date)).Result()
+
+	// Convert data from string back to JSON format
+	json_err := json.Unmarshal([]byte(cachedData), &products)
+	if json_err != nil {
+		fmt.Println(json_err)
+		return
+	}
+	
+    if err == nil {
+        // Data found in cache, return it
+        c.JSON(200, gin.H{
+            "products": products,
+        })
+        return
+    }
+
+
+	
 	listOfProducts := make([]models.CatalogProduct, 0)
 	for i := 0; i < len(products); i++ {
 		found := false
 		
-		if products[i].OnlineDate != nil && tag == *(products[i].OnlineDate){
+		if products[i].OnlineDate != nil && online_date == *(products[i].OnlineDate){
 			found = true
 		}
 		if found {
@@ -59,6 +82,16 @@ func SearchProductsHandler(c *gin.Context) {
 			   products[i])
 		}
 	}
+
+
+	data, _ := json.Marshal(listOfProducts)
+
+	// Save to redis cache
+	err = initializers.RedisClient.Set(c, fmt.Sprintf("product-%s", online_date), string(data), 0).Err()
+    if err != nil {
+        c.JSON(500, gin.H{"error": "Failed to save data to cache"})
+        return
+    }
 	c.JSON(http.StatusOK, gin.H{
 		"products": listOfProducts,
 	})
