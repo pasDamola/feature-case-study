@@ -53,13 +53,17 @@ func SearchProductsHandler(c *gin.Context) {
 	// Check if data exists in Redis cache
     cachedData, err := initializers.RedisClient.Get(c, fmt.Sprintf("product-%s", online_date)).Result()
 
-	// Convert data from string back to JSON format
-	json_err := json.Unmarshal([]byte(cachedData), &products)
-	if json_err != nil {
-		fmt.Println(json_err)
-		return
-	}
 	
+	// Convert data from string back to JSON format
+	if len(cachedData) > 0 {
+		json_err := json.Unmarshal([]byte(cachedData), &products)
+		if json_err != nil {
+			fmt.Println(json_err)
+			return
+		}
+	
+
+
     if err == nil {
         // Data found in cache, return it
         c.JSON(200, gin.H{
@@ -68,13 +72,16 @@ func SearchProductsHandler(c *gin.Context) {
         return
     }
 
-
+}
 	
 	listOfProducts := make([]models.CatalogProduct, 0)
 	for i := 0; i < len(products); i++ {
 		found := false
+
+		fmt.Println("out", products[i])
 		
 		if products[i].OnlineDate != nil && online_date == *(products[i].OnlineDate){
+			fmt.Println("in", products[i])
 			found = true
 		}
 		if found {
@@ -95,4 +102,27 @@ func SearchProductsHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"products": listOfProducts,
 	})
+ }
+
+ func AdminPageHandler(c *gin.Context) {
+	c.HTML(
+		http.StatusOK,
+		"index.html",
+		gin.H{
+			"successMessage": "",
+		},
+	  )
+ }
+
+ func ClearCacheHandler(c *gin.Context) {
+	err := initializers.RedisClient.FlushAll(c).Err()
+	if err != nil {
+		c.JSON(500, gin.H{"error": "Failed to clear cache"})
+	}
+
+	successMessage := "Cache cleared successfully"
+
+	c.HTML(http.StatusOK, "index.html", gin.H{
+        "successMessage": successMessage,
+    })
  }

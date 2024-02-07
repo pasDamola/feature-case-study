@@ -19,8 +19,12 @@ func init() {
 func main() {
    
  router := gin.Default()
+ router.LoadHTMLGlob("templates/*.html")
+
+ router.GET("/admin", controllers.AdminPageHandler)
  router.POST("/products", controllers.NewProductHandler)
  router.GET("/products", controllers.ListProductsHandler)
  router.GET("/products/search", controllers.SearchProductsHandler)
+ router.POST("/products/clear", controllers.ClearCacheHandler)
  router.Run()
 }
