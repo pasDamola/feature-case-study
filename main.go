@@ -22,5 +22,6 @@ func main() {
  router.POST("/products", controllers.NewProductHandler)
  router.GET("/products", controllers.ListProductsHandler)
  router.GET("/products/search", controllers.SearchProductsHandler)
+ router.GET("/products/clear", controllers.ClearCacheHandler)
  router.Run()
 }
