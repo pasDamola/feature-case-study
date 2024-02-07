@@ -14,7 +14,7 @@ type Product struct {
 	Description   string  `json:"description"`
 	Status        string  `json:"status"`
 	CreatedAt  time.Time `json:"createdAt"`
-	OnlineDate  time.Time `json:"onlineDate"`
+	OnlineDate  string `json:"onlineDate"`
 }
 
 var products []Product
@@ -41,10 +41,27 @@ func ListProductsHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, products)
 }
 
+func SearchProductsHandler(c *gin.Context) {
+   tag := c.Query("online_date")
+   listOfProducts := make([]Product, 0)
+   for i := 0; i < len(products); i++ {
+       found := false
+       if tag == products[i].OnlineDate {
+		   found = true
+	   }
+       if found {
+		listOfProducts = append(listOfProducts, 
+              products[i])
+       }
+   }
+   c.JSON(http.StatusOK, listOfProducts)
+}
+
 
 func main() {
  router := gin.Default()
  router.POST("/products", NewProductHandler)
  router.GET("/products", ListProductsHandler)
+ router.GET("/products/search", SearchProductsHandler)
  router.Run(":9003")
 }
