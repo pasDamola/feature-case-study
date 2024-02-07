@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/pasDamola/feature-case-study/initializers"
 	"github.com/rs/xid"
 )
 
@@ -19,6 +20,8 @@ type Product struct {
 
 var products []Product
 func init() {
+   initializers.LoadEnvVariables()
+   initializers.ConnectToDB()
    products = make([]Product, 0)
 }
 
@@ -63,5 +66,5 @@ func main() {
  router.POST("/products", NewProductHandler)
  router.GET("/products", ListProductsHandler)
  router.GET("/products/search", SearchProductsHandler)
- router.Run(":9003")
+ router.Run()
 }
