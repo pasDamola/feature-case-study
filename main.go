@@ -14,42 +14,11 @@ func init() {
    initializers.ConnectToDB()
    initializers.ConnectToRedis()
    initializers.ConnectToRabbitMQ()
-   initializers.StartProductCron()
+   initializers.StartNewProductCron()
+   initializers.StartDownloadProductCron()
 
 }
 
-// type Request struct {
-//    URL string `json:"url"`
-//  }
-
-
-// func ParserHandler(c *gin.Context) {
-   
-//    var request Request
-//    if err := c.ShouldBindJSON(&request); err != nil {
-//        c.JSON(http.StatusBadRequest, gin.H{
-//           "error": err.Error()})
-//        return
-//    }
-//    data, _ := json.Marshal(request)
-//    err := initializers.ChannelAmqp.Publish(
-//        "",
-//        os.Getenv("RABBITMQ_QUEUE"),
-//        false,
-//        false,
-//        amqp.Publishing{
-//            ContentType: "application/json",
-//            Body:        []byte(data),
-//        })
-//    if err != nil {
-//        fmt.Println(err)
-//        c.JSON(http.StatusInternalServerError, 
-//           gin.H{"error": "Error while publishing to RabbitMQ"})
-//        return
-//    }
-//    c.JSON(http.StatusOK, map[string]string{
-//       "message": "success"})
-// }
 
 
 func main() {

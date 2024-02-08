@@ -12,15 +12,15 @@ import (
 	"github.com/streadway/amqp"
 )
 
-var c *cron.Cron
 
-func StartProductCron() {
+
+func StartNewProductCron() {
 	 // Set up cron job
-	 c = cron.New()
+	 c := cron.New()
 	 
 
-	 // Schedule the cron job to run every minute
-	 c.AddFunc("* * * * *", publishNewProducts)
+	 // Schedule the cron job to run every 10 minutes
+	 c.AddFunc("*/10 * * * *", publishNewProducts)
  
 	 c.Start()
 }
