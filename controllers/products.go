@@ -39,9 +39,7 @@ func NewProductHandler(c *gin.Context) {
 func ListProductsHandler(c *gin.Context) {
 	var products []models.CatalogProduct
 	initializers.DB.Find(&products)
-	c.JSON(http.StatusOK, gin.H{
-		"products": products,
-	})
+	c.JSON(http.StatusOK, products)
 }
 
 func SearchProductsHandler(c *gin.Context) {
@@ -104,9 +102,25 @@ func SearchProductsHandler(c *gin.Context) {
 	})
  }
 
+ func AdminPageHandler(c *gin.Context) {
+	c.HTML(
+		http.StatusOK,
+		"index.html",
+		gin.H{
+			"successMessage": "",
+		},
+	  )
+ }
+
  func ClearCacheHandler(c *gin.Context) {
 	err := initializers.RedisClient.FlushAll(c).Err()
 	if err != nil {
 		c.JSON(500, gin.H{"error": "Failed to clear cache"})
 	}
+
+	successMessage := "Cache cleared successfully"
+
+	c.HTML(http.StatusOK, "index.html", gin.H{
+        "successMessage": successMessage,
+    })
  }
