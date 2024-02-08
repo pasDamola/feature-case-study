@@ -39,9 +39,7 @@ func NewProductHandler(c *gin.Context) {
 func ListProductsHandler(c *gin.Context) {
 	var products []models.CatalogProduct
 	initializers.DB.Find(&products)
-	c.JSON(http.StatusOK, gin.H{
-		"products": products,
-	})
+	c.JSON(http.StatusOK, products)
 }
 
 func SearchProductsHandler(c *gin.Context) {
