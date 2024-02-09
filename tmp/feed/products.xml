@@ -1,0 +1,40 @@
+<CatalogProduct>
+    <ProductID>1</ProductID>
+    <Name>Product 1</Name>
+    <Description>description of Product 1</Description>
+    <Status>processed</Status>
+    <OnlineDate>2024-02-08 14:25:09</OnlineDate>
+    <CreatedAt>2024-02-07T15:21:02.638229+01:00</CreatedAt>
+</CatalogProduct>
+<CatalogProduct>
+    <ProductID>2</ProductID>
+    <Name>Product 2</Name>
+    <Description>description of Product 2</Description>
+    <Status>processed</Status>
+    <OnlineDate>2024-02-08 14:25:11</OnlineDate>
+    <CreatedAt>2024-02-07T15:21:10.373698+01:00</CreatedAt>
+</CatalogProduct>
+<CatalogProduct>
+    <ProductID>4</ProductID>
+    <Name>Product 4</Name>
+    <Description>description 4</Description>
+    <Status>processed</Status>
+    <OnlineDate>2024-02-08 14:40:02</OnlineDate>
+    <CreatedAt>2024-02-08T01:03:41.634118+01:00</CreatedAt>
+</CatalogProduct>
+<CatalogProduct>
+    <ProductID>3</ProductID>
+    <Name>Product 3</Name>
+    <Description>description of Product 3</Description>
+    <Status>processed</Status>
+    <OnlineDate>2024-02-08 14:40:04</OnlineDate>
+    <CreatedAt>2024-02-07T15:21:18.161213+01:00</CreatedAt>
+</CatalogProduct>
+<CatalogProduct>
+    <ProductID>5</ProductID>
+    <Name>Product 5</Name>
+    <Description>description of Product 5</Description>
+    <Status>processed</Status>
+    <OnlineDate>2024-02-09 02:10:02</OnlineDate>
+    <CreatedAt>2024-02-09T01:31:19.152744+01:00</CreatedAt>
+</CatalogProduct>

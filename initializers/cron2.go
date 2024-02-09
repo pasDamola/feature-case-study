@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/pasDamola/feature-case-study/models"
 	"github.com/robfig/cron/v3"
@@ -16,7 +17,7 @@ func StartDownloadProductCron() {
 	
 
 	// Schedule the cron job to run every day at 3AM
-	c.AddFunc("0 3 * * *", generateXMLData)
+	c.AddFunc("* * * * *", generateXMLData)
 
 	c.Start()
 }
@@ -34,7 +35,12 @@ func generateXMLData() {
         log.Fatalf("Failed to generate XML: %s", err)
     }
 
-   fmt.Println(string(xmlData))
+	err = os.WriteFile("./tmp/feed/products.xml", xmlData, 0644)
+    if err != nil {
+        fmt.Println("Error writing XML to file:", err)
+        return
+    }
+
 
     log.Println("XML file generated successfully")
 }
