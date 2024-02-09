@@ -1,6 +1,10 @@
 package main
 
 import (
+	"log"
+	"net/http"
+	"time"
+
 	"github.com/gin-gonic/gin"
 	"github.com/pasDamola/feature-case-study/controllers"
 	"github.com/pasDamola/feature-case-study/initializers"
@@ -14,42 +18,33 @@ func init() {
    initializers.ConnectToDB()
    initializers.ConnectToRedis()
    initializers.ConnectToRabbitMQ()
-   initializers.StartProductCron()
+   initializers.StartNewProductCron()
+   initializers.StartDownloadProductCron()
 
 }
 
-// type Request struct {
-//    URL string `json:"url"`
-//  }
+func Logger() gin.HandlerFunc {
+   return func(c *gin.Context) {
+       start := time.Now()
 
+       c.Next()
 
-// func ParserHandler(c *gin.Context) {
-   
-//    var request Request
-//    if err := c.ShouldBindJSON(&request); err != nil {
-//        c.JSON(http.StatusBadRequest, gin.H{
-//           "error": err.Error()})
-//        return
-//    }
-//    data, _ := json.Marshal(request)
-//    err := initializers.ChannelAmqp.Publish(
-//        "",
-//        os.Getenv("RABBITMQ_QUEUE"),
-//        false,
-//        false,
-//        amqp.Publishing{
-//            ContentType: "application/json",
-//            Body:        []byte(data),
-//        })
-//    if err != nil {
-//        fmt.Println(err)
-//        c.JSON(http.StatusInternalServerError, 
-//           gin.H{"error": "Error while publishing to RabbitMQ"})
-//        return
-//    }
-//    c.JSON(http.StatusOK, map[string]string{
-//       "message": "success"})
-// }
+       // Log request details
+       end := time.Now()
+       latency := end.Sub(start)
+       clientIP := c.ClientIP()
+       method := c.Request.Method
+       statusCode := c.Writer.Status()
+       statusText := http.StatusText(statusCode)
+       route := c.FullPath()
+
+      
+        log.Printf("[%s] %s %s %s %d %s %v\n", end.Format("2006-01-02 15:04:05"), clientIP, method, route, statusCode, statusText, latency)
+
+      
+   }
+}
+
 
 
 func main() {
@@ -57,6 +52,8 @@ func main() {
  router := gin.Default()
  router.LoadHTMLGlob("templates/*.html")
 
+
+ router.Use(Logger())
 
 
  router.GET("/admin", controllers.AdminPageHandler)
