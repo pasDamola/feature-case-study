@@ -8,6 +8,7 @@ services:
       DB_URL: "host=snuffleupagus.db.elephantsql.com user=kbtaxwhu password=VthO3y1OPdi4GXxVcW8PE11ddTAxC1W2 dbname=kbtaxwhu port=5432 sslmode=disable"
       RABBITMQ_URI: "amqp://user:password@rabbitmq:5672/"
       RABBITMQ_QUEUE: products
+      REDIS_URL: redis:6379
     build: .
     ports:
       - "9003:9003"
@@ -37,10 +38,10 @@ services:
 
   redis:
     image: redis:latest
-    env_file:
-      - .env
+    environment:
+      REDIS_URL: "redis://redis:6379"
     ports:
-      - "6378:6379"
+      - "6379:6379"
 
   rabbitmq:
     image: rabbitmq:3-management

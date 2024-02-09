@@ -20,7 +20,7 @@ func StartNewProductCron() {
 	 
 
 	 // Schedule the cron job to run every 10 minutes
-	 c.AddFunc("* * * * *", publishNewProducts)
+	 c.AddFunc("*/10 * * * *", publishNewProducts)
  
 	 c.Start()
 }

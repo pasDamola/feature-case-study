@@ -76,10 +76,8 @@ func SearchProductsHandler(c *gin.Context) {
 	for i := 0; i < len(products); i++ {
 		found := false
 
-		fmt.Println("out", products[i])
 		
 		if products[i].OnlineDate != nil && online_date == *(products[i].OnlineDate){
-			fmt.Println("in", products[i])
 			found = true
 		}
 		if found {
@@ -93,6 +91,7 @@ func SearchProductsHandler(c *gin.Context) {
 
 	// Save to redis cache
 	err = initializers.RedisClient.Set(c, fmt.Sprintf("product-%s", online_date), string(data), 0).Err()
+	fmt.Println(err)
     if err != nil {
         c.JSON(500, gin.H{"error": "Failed to save data to cache"})
         return

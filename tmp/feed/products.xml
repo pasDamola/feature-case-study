@@ -38,3 +38,19 @@
     <OnlineDate>2024-02-09 02:10:02</OnlineDate>
     <CreatedAt>2024-02-09T01:31:19.152744+01:00</CreatedAt>
 </CatalogProduct>
+<CatalogProduct>
+    <ProductID>6</ProductID>
+    <Name>Product 6</Name>
+    <Description>description of Product 6</Description>
+    <Status>processed</Status>
+    <OnlineDate>2024-02-09 07:04:01</OnlineDate>
+    <CreatedAt>2024-02-09T08:03:40.091918+01:00</CreatedAt>
+</CatalogProduct>
+<CatalogProduct>
+    <ProductID>7</ProductID>
+    <Name>Product 7</Name>
+    <Description>description of Product 7</Description>
+    <Status>processed</Status>
+    <OnlineDate>2024-02-09 07:05:01</OnlineDate>
+    <CreatedAt>2024-02-09T08:04:19.801708+01:00</CreatedAt>
+</CatalogProduct>

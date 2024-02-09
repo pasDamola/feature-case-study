@@ -17,7 +17,7 @@ func StartDownloadProductCron() {
 	
 
 	// Schedule the cron job to run every day at 3AM
-	c.AddFunc("* * * * *", generateXMLData)
+	c.AddFunc("0 3 * * *", generateXMLData)
 
 	c.Start()
 }
