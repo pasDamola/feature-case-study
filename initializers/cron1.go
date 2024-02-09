@@ -20,7 +20,7 @@ func StartNewProductCron() {
 	 
 
 	 // Schedule the cron job to run every 10 minutes
-	 c.AddFunc("*/10 * * * *", publishNewProducts)
+	 c.AddFunc("* * * * *", publishNewProducts)
  
 	 c.Start()
 }
@@ -38,7 +38,6 @@ func queryNewProducts() []models.CatalogProduct {
 
 func publishNewProducts() {
 	for _, product := range queryNewProducts() {
-		fmt.Println("product", product)
         publishToRabbitMQ(product)
         markAsInProgress(product)
     }
