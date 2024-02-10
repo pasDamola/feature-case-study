@@ -20,7 +20,7 @@ func StartNewProductCron() {
 	 
 
 	 // Schedule the cron job to run every 10 minutes
-	 c.AddFunc("*/10 * * * *", publishNewProducts)
+	 c.AddFunc(os.Getenv("CRON_EVERY_10_MINUTES"), publishNewProducts)
  
 	 c.Start()
 }
@@ -68,7 +68,7 @@ func publishToRabbitMQ(product models.CatalogProduct) {
     }
     defer ch.Close()
 
-    
+    fmt.Println(os.Getenv("RABBITMQ_QUEUE"))
     q, err := ch.QueueDeclare(
         os.Getenv("RABBITMQ_QUEUE"),
         true,                        
@@ -143,6 +143,8 @@ func consumeNewProducts() {
         return
     }
 
+    time.Sleep(1 * time.Second)
+
     // Consume messages from the queue
     msgs, err := ch.Consume(
         q.Name,
@@ -160,7 +162,6 @@ func consumeNewProducts() {
     // Process messages
     for msg := range msgs {
         // Simulate processing time
-        time.Sleep(1 * time.Second)
 
         // Decode message into Product
         var product models.CatalogProduct

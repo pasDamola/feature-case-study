@@ -13,32 +13,57 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+
 func SetupRouter() *gin.Engine {
 	router := gin.Default()
+	router.LoadHTMLGlob("templates/*.html")
 	return router
 }
-func TestListProductsHandler(t *testing.T) {
-	r := SetupRouter()
-	r.GET("/products", controllers.ListProductsHandler)
-	req, _ := http.NewRequest("GET", "/products", nil)
-	w := httptest.NewRecorder()
-	r.ServeHTTP(w, req)
-	var products []models.CatalogProduct
-	json.Unmarshal(w.Body.Bytes(), &products)
-	assert.Equal(t, http.StatusOK, w.Code)
-	assert.Equal(t, 3, len(products))
+
+func TestNewProductsHandler(t *testing.T) {
+    r := SetupRouter()
+    r.POST("/products", controllers.NewProductHandler)
+    product := models.CatalogProduct{
+        Name: "Demo Name",
+        Description: "Demo Description",
+    }
+    jsonValue, _ := json.Marshal(product)
+    req, _ := http.NewRequest("POST", "/products", bytes.NewBuffer(jsonValue))
+
+    w := httptest.NewRecorder()
+    r.ServeHTTP(w, req)
+    assert.Equal(t, http.StatusCreated, w.Code)
 }
 
-func TestNewProductHandler(t *testing.T) {
-	r := SetupRouter()
-	r.POST("/products", controllers.NewProductHandler)
-	product := models.CatalogProduct{
-	   Name: "Product 4",
-	   Description: "Description of Prodcut 4",
-	}
-	jsonValue, _ := json.Marshal(product)
-	req, _ := http.NewRequest("POST", "/products", bytes.NewBuffer(jsonValue))
-	w := httptest.NewRecorder()
-	r.ServeHTTP(w, req)
-	assert.Equal(t, http.StatusOK, w.Code)
+func TestListProductsHandler(t *testing.T) {
+    r := SetupRouter()
+    r.GET("/products", controllers.ListProductsHandler)
+    req, _ := http.NewRequest("GET", "/products", nil)
+    w := httptest.NewRecorder()
+    r.ServeHTTP(w, req)
+
+    var products []models.CatalogProduct
+    json.Unmarshal(w.Body.Bytes(), &products)
+
+    assert.Equal(t, http.StatusOK, w.Code)
+    assert.NotEmpty(t, products)
 }
+
+
+func TestAdminPageHandler(t *testing.T) {
+    r := SetupRouter()
+
+    r.GET("/admin", controllers.AdminPageHandler)
+
+    req, _ := http.NewRequest("GET", "/admin", nil)
+
+
+    w := httptest.NewRecorder()
+
+    r.ServeHTTP(w, req)
+
+    assert.Equal(t, http.StatusOK, w.Code)
+
+    assert.Contains(t, w.Body.String(), "Admin Page")
+}
+

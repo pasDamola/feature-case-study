@@ -1,8 +1,12 @@
 version: "3"
+networks:
+  app-network:
 
 services:
   app:
     container_name: app
+    networks:
+      - app-network
     environment:
       PORT: 9003
       DB_URL: "host=snuffleupagus.db.elephantsql.com user=kbtaxwhu password=VthO3y1OPdi4GXxVcW8PE11ddTAxC1W2 dbname=kbtaxwhu port=5432 sslmode=disable"
@@ -17,12 +21,13 @@ services:
         source: ./tmp/feed
         target: /tmp/feed
     depends_on:
-      - db
-      - redis
-      - rabbitmq
+      rabbitmq:
+        condition: service_healthy
 
   db:
     image: postgres:latest
+    networks:
+      - app-network
     environment:
       POSTGRES_DB: "kbtaxwhu"
       POSTGRES_USER: "kbtaxwhu"
@@ -38,13 +43,22 @@ services:
 
   redis:
     image: redis:latest
+    networks:
+      - app-network
     environment:
       REDIS_URL: "redis://redis:6379"
     ports:
       - "6379:6379"
 
   rabbitmq:
-    image: rabbitmq:3-management
+    image: rabbitmq:latest
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 25s
+      retries: 10
+      timeout: 5s
     ports:
       - "5672:5672"
       - "15672:15672"
